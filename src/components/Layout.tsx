@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Avatar } from "antd";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
@@ -19,9 +19,14 @@ export default function Layout() {
   }
 
   const userNavigation = [
-    { name: "Settings", onclick: () => navigate("/settings") },
+    {
+      name: "Settings",
+      path: "/settings",
+      onclick: () => navigate("/settings"),
+    },
     {
       name: "Sign out",
+      path: "/login",
       onclick: () => {
         logout?.();
         navigate("/login");
@@ -30,6 +35,10 @@ export default function Layout() {
   ];
 
   const avatarLetter = user.email[0].toUpperCase();
+  const activeMenu = [...navigation, ...userNavigation].find(
+    (el) => el.path === location.pathname
+  );
+  const title = (activeMenu?.name.charAt(0) ?? "") + activeMenu?.name.slice(1);
   return (
     <>
       <div className="min-h-full">
@@ -45,9 +54,9 @@ export default function Layout() {
                         {navigation.map((item) => (
                           <Link
                             key={item.name}
-                            to={item.href}
+                            to={item.path}
                             className={classNames(
-                              item.href === location.pathname
+                              item.path === location.pathname
                                 ? "bg-gray-900 text-white"
                                 : "text-gray-300 hover:bg-gray-700 hover:text-white",
                               "rounded-md px-3 py-2 text-sm font-medium"
@@ -128,7 +137,7 @@ export default function Layout() {
                     <Disclosure.Button
                       key={item.name}
                       as={Link}
-                      to={item.href}
+                      to={item.path}
                       className={classNames(
                         item.name === location.pathname
                           ? "bg-gray-900 text-white"
@@ -176,13 +185,13 @@ export default function Layout() {
         <header className="bg-white shadow">
           <div className="mx-auto max-w-full px-4 py-6 sm:px-6 lg:px-8">
             <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-              Dashboard
+              {title}
             </h1>
           </div>
         </header>
         <main>
           <div className="mx-auto max-w-full px-4 py-6 sm:px-6 lg:px-8">
-            content
+            <Outlet />
           </div>
         </main>
       </div>

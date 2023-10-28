@@ -4,6 +4,7 @@ import Login from "./Login";
 import Layout from "../components/Layout";
 import ErrorPage from "./ErrorPage";
 import ProtectedRoute from "./ProtectedRoute";
+import Settings from "./Settings";
 
 const privateRoutes: RouteObject[] = [
   {
@@ -17,6 +18,10 @@ const privateRoutes: RouteObject[] = [
           {
             index: true,
             element: <Home />,
+          },
+          {
+            path: "/settings",
+            element: <Settings />,
           },
         ],
       },
