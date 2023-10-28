@@ -2,13 +2,13 @@ import { RouteObject } from "react-router-dom";
 import Home from "./Home";
 import Login from "./Login";
 import Layout from "../components/Layout";
-import ProtectedRoot from "./ProtectedRoot";
+import ProtectedRoute from "./ProtectedRoot";
 import ErrorPage from "./ErrorPage";
 
 const privateRoutes: RouteObject[] = [
   {
     path: "/",
-    element: <ProtectedRoot />,
+    element: <ProtectedRoute />,
     errorElement: <ErrorPage />,
     children: [
       {

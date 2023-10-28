@@ -2,7 +2,7 @@ import React from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../provider/AuthProvider";
 
-const ProtectedRoot = () => {
+const ProtectedRoute = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -22,4 +22,4 @@ const ProtectedRoot = () => {
   return <Outlet />;
 };
 
-export default ProtectedRoot;
+export default ProtectedRoute;
