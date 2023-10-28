@@ -10,7 +10,6 @@ axios.defaults.baseURL = "http://localhost:8000/";
 
 const Router = () => {
   const { initialized, user } = useAuth();
-  console.log(initialized, user);
   if (!initialized) {
     return;
   }

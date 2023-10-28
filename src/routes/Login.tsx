@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Form, Input } from "antd";
 import { useAuth } from "../provider/AuthProvider";
+import { Localize } from "../utils/Localize";
 import { UserAuth } from "../types";
 
 const onFinishFailed = (errorInfo: any) => {
@@ -18,19 +19,16 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-24 lg:px-8">
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm mb-8">
-          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Sign in to your account
+          <h2 className="pb-8 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+            {Localize.LoginToYourAccount}
           </h2>
         </div>
         <Form
-          name="basic"
-          labelCol={{ span: 8 }}
-          wrapperCol={{ span: 16 }}
-          style={{ maxWidth: 600 }}
-          initialValues={{ remember: true }}
+          labelCol={{ span: 24 }}
+          wrapperCol={{ span: 24 }}
           onFinish={handleLogin}
           onFinishFailed={onFinishFailed}
           autoComplete="off"
@@ -38,7 +36,7 @@ const Login: React.FC = () => {
           <Form.Item<UserAuth>
             label="Username"
             name="username"
-            rules={[{ required: true, message: "Please input your username!" }]}
+            rules={[{ required: true, message: Localize.UsernameRequired }]}
           >
             <Input />
           </Form.Item>
@@ -46,14 +44,14 @@ const Login: React.FC = () => {
           <Form.Item<UserAuth>
             label="Password"
             name="password"
-            rules={[{ required: true, message: "Please input your password!" }]}
+            rules={[{ required: true, message: Localize.PasswordRequired }]}
           >
             <Input.Password />
           </Form.Item>
 
-          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+          <Form.Item wrapperCol={{ span: 24 }} className="mt-12">
             <Button type="primary" htmlType="submit">
-              Submit
+              {Localize.Login}
             </Button>
           </Form.Item>
         </Form>
