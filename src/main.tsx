@@ -9,7 +9,7 @@ import "./index.css";
 axios.defaults.baseURL = "http://localhost:8000/";
 
 const Router = () => {
-  const { initialized, user } = useAuth();
+  const { initialized } = useAuth();
   if (!initialized) {
     return;
   }
