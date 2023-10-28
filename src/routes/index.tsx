@@ -2,8 +2,8 @@ import { RouteObject } from "react-router-dom";
 import Home from "./Home";
 import Login from "./Login";
 import Layout from "../components/Layout";
-import ProtectedRoute from "./ProtectedRoot";
 import ErrorPage from "./ErrorPage";
+import ProtectedRoute from "./ProtectedRoute";
 
 const privateRoutes: RouteObject[] = [
   {

@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Avatar } from "antd";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
@@ -11,6 +11,7 @@ function classNames(...classes: string[]) {
 }
 
 export default function Layout() {
+  const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   if (!user) {
@@ -28,6 +29,7 @@ export default function Layout() {
     },
   ];
 
+  const avatarLetter = user.email[0].toUpperCase();
   return (
     <>
       <div className="min-h-full">
@@ -41,18 +43,18 @@ export default function Layout() {
                     <div className="hidden md:block">
                       <div className="ml-10 flex items-baseline space-x-4">
                         {navigation.map((item) => (
-                          <a
+                          <Link
                             key={item.name}
-                            href={item.href}
+                            to={item.href}
                             className={classNames(
-                              item.name
+                              item.href === location.pathname
                                 ? "bg-gray-900 text-white"
                                 : "text-gray-300 hover:bg-gray-700 hover:text-white",
                               "rounded-md px-3 py-2 text-sm font-medium"
                             )}
                           >
                             {item.name}
-                          </a>
+                          </Link>
                         ))}
                       </div>
                     </div>
@@ -65,7 +67,7 @@ export default function Layout() {
                             <span className="absolute -inset-1.5" />
                             <span className="sr-only">Open user menu</span>
                             <Avatar className="bg-orange-200 text-black">
-                              {user.name[0]}
+                              {avatarLetter}
                             </Avatar>
                           </Menu.Button>
                         </div>
@@ -125,10 +127,10 @@ export default function Layout() {
                   {navigation.map((item) => (
                     <Disclosure.Button
                       key={item.name}
-                      as="a"
-                      href={item.href}
+                      as={Link}
+                      to={item.href}
                       className={classNames(
-                        item.name
+                        item.name === location.pathname
                           ? "bg-gray-900 text-white"
                           : "text-gray-300 hover:bg-gray-700 hover:text-white",
                         "block rounded-md px-3 py-2 text-base font-medium"
@@ -142,7 +144,7 @@ export default function Layout() {
                   <div className="flex items-center px-5">
                     <div className="flex-shrink-0">
                       <Avatar className="bg-orange-200 text-black">
-                        {user.name[0]}
+                        {avatarLetter}
                       </Avatar>
                     </div>
                     <div className="ml-3">
@@ -172,14 +174,16 @@ export default function Layout() {
         </Disclosure>
 
         <header className="bg-white shadow">
-          <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-full px-4 py-6 sm:px-6 lg:px-8">
             <h1 className="text-3xl font-bold tracking-tight text-gray-900">
               Dashboard
             </h1>
           </div>
         </header>
         <main>
-          <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">content</div>
+          <div className="mx-auto max-w-full px-4 py-6 sm:px-6 lg:px-8">
+            content
+          </div>
         </main>
       </div>
     </>
