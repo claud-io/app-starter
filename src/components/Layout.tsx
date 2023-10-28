@@ -1,24 +1,33 @@
 import { Fragment } from "react";
+import { useNavigate } from "react-router-dom";
+import { Avatar } from "antd";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { useAuth } from "../provider/AuthProvider";
 import { navigation } from "./consts";
-
-const user = {
-  name: "Cla",
-  email: "cla@example.com",
-  imageUrl: "http://placekitten.com/g/250/250",
-};
-
-const userNavigation = [
-  { name: "Settings", href: "#" },
-  { name: "Sign out", href: "#" },
-];
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Example() {
+export default function Layout() {
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
+  if (!user) {
+    return;
+  }
+
+  const userNavigation = [
+    { name: "Settings", onclick: () => navigate("/settings") },
+    {
+      name: "Sign out",
+      onclick: () => {
+        logout?.();
+        navigate("/login");
+      },
+    },
+  ];
+
   return (
     <>
       <div className="min-h-full">
@@ -55,11 +64,9 @@ export default function Example() {
                           <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                             <span className="absolute -inset-1.5" />
                             <span className="sr-only">Open user menu</span>
-                            <img
-                              className="h-8 w-8 rounded-full"
-                              src={user.imageUrl}
-                              alt=""
-                            />
+                            <Avatar className="bg-orange-200 text-black">
+                              {user.name[0]}
+                            </Avatar>
                           </Menu.Button>
                         </div>
                         <Transition
@@ -75,15 +82,15 @@ export default function Example() {
                             {userNavigation.map((item) => (
                               <Menu.Item key={item.name}>
                                 {({ active }) => (
-                                  <a
-                                    href={item.href}
+                                  <span
+                                    onClick={item.onclick}
                                     className={classNames(
                                       active ? "bg-gray-100" : "",
                                       "block px-4 py-2 text-sm text-gray-700"
                                     )}
                                   >
                                     {item.name}
-                                  </a>
+                                  </span>
                                 )}
                               </Menu.Item>
                             ))}
@@ -134,11 +141,9 @@ export default function Example() {
                 <div className="border-t border-gray-700 pb-3 pt-4">
                   <div className="flex items-center px-5">
                     <div className="flex-shrink-0">
-                      <img
-                        className="h-10 w-10 rounded-full"
-                        src={user.imageUrl}
-                        alt=""
-                      />
+                      <Avatar className="bg-orange-200 text-black">
+                        {user.name[0]}
+                      </Avatar>
                     </div>
                     <div className="ml-3">
                       <div className="text-base font-medium leading-none text-white">
@@ -153,8 +158,7 @@ export default function Example() {
                     {userNavigation.map((item) => (
                       <Disclosure.Button
                         key={item.name}
-                        as="a"
-                        href={item.href}
+                        onClick={item.onclick}
                         className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                       >
                         {item.name}
@@ -175,9 +179,7 @@ export default function Example() {
           </div>
         </header>
         <main>
-          <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-            {/* Your content */}
-          </div>
+          <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">content</div>
         </main>
       </div>
     </>

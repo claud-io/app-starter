@@ -1,10 +1,28 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import axios from "axios";
+import AuthProvider, { useAuth } from "./provider/AuthProvider";
+import { privateRoutes, publicRoutes } from "./routes";
+import "./index.css";
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+axios.defaults.baseURL = "http://localhost:8000/";
+
+const Router = () => {
+  const { initialized, user } = useAuth();
+  console.log(initialized, user);
+  if (!initialized) {
+    return;
+  }
+
+  const router = createBrowserRouter([...privateRoutes, ...publicRoutes]);
+  return <RouterProvider router={router} />;
+};
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-)
+    <AuthProvider>
+      <Router />
+    </AuthProvider>
+  </React.StrictMode>
+);

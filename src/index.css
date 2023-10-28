@@ -11,3 +11,7 @@
     -webkit-text-size-adjust: 100%;
   }
 }
+
+.ant-btn:not([disabled]) {
+  background: #1677ff !important;
+}
