@@ -34,7 +34,7 @@ export default function Layout() {
     },
   ];
 
-  const avatarLetter = user.email[0].toUpperCase();
+  const avatarLetter = user.full_name[0].toUpperCase();
   const activeMenu = [...navigation, ...userNavigation].find(
     (el) => el.path === location.pathname
   );

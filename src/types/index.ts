@@ -1,8 +1,7 @@
 export type User = {
-  id: number;
-  name: string;
-  surname: string;
-  email: string;
+  username: string;
+  full_name: string;
+  role: string;
   isAdmin?: boolean;
 };
 
@@ -11,7 +10,13 @@ export type UserAuth = {
   password: string;
 };
 
+
 export type TokenResponse = {
   access_token: string;
   refresh_token: string;
+  token_type: string;
+  username: string;
+  full_name: string;
+  role: string;
+  is_admin: boolean;
 };

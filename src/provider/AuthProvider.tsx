@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
-import { login, me, refreshToken } from "../api/indext";
-import { TokenResponse, User, UserAuth } from "../types";
+import { login, refreshToken } from "../api/indext";
+import { SignInTokenResponse,User, UserAuth } from "../types";
 import { REFRESH_TOKEN_KEY, TOKEN_KEY } from "../const";
 
 interface IAuthProviderProps {
@@ -27,7 +27,7 @@ const AuthProvider = ({ children }: IAuthProviderProps) => {
     const token = localStorage.getItem(TOKEN_KEY);
     if (token) {
       axios.defaults.headers.common["Authorization"] = "Bearer " + token;
-      return refreshToken().then(loadUser);
+      return refreshToken(localStorage.getItem(REFRESH_TOKEN_KEY)).then(loadUser);
     }
 
     delete axios.defaults.headers.common["Authorization"];
@@ -35,15 +35,15 @@ const AuthProvider = ({ children }: IAuthProviderProps) => {
     return new Promise((resolve) => resolve(true));
   }, []);
 
-  const loadUser = async ({ access_token, refresh_token }: TokenResponse) => {
-    if (!access_token || !refresh_token) {
+  const loadUser = async (response: SignInTokenResponse) => {
+    if (!response.access_token || !response.refresh_token) {
       return false;
     }
 
-    localStorage.setItem(REFRESH_TOKEN_KEY, refresh_token);
-    localStorage.setItem(TOKEN_KEY, access_token);
-    axios.defaults.headers.common["Authorization"] = "Bearer " + access_token;
-    await me().then(setUser);
+    localStorage.setItem(REFRESH_TOKEN_KEY, response.refresh_token);
+    localStorage.setItem(TOKEN_KEY, response.access_token);
+    axios.defaults.headers.common["Authorization"] = "Bearer " + response.access_token;
+    setUser({...response})
     return true;
   };
 
