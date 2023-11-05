@@ -3,7 +3,7 @@ import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Avatar } from "antd";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useAuth } from "../provider/AuthProvider";
+import { useAuth } from "../hooks";
 import { navigation } from "./consts";
 
 function classNames(...classes: string[]) {
@@ -34,7 +34,7 @@ export default function Layout() {
     },
   ];
 
-  const avatarLetter = user.full_name[0].toUpperCase();
+  const avatarLetter = user.fullName[0].toUpperCase();
   const activeMenu = [...navigation, ...userNavigation].find(
     (el) => el.path === location.pathname
   );
@@ -158,7 +158,7 @@ export default function Layout() {
                     </div>
                     <div className="ml-3">
                       <div className="text-base font-medium leading-none text-white">
-                        {user.name}
+                        {user.fullName}
                       </div>
                       <div className="text-sm font-medium leading-none text-gray-400">
                         {user.email}

@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../provider/AuthProvider";
+import { useAuth } from "../hooks";
 
 const ProtectedRoute = () => {
   const location = useLocation();
@@ -9,11 +9,11 @@ const ProtectedRoute = () => {
 
   React.useEffect(() => {
     if (!user) {
-      let params = new URLSearchParams();
+      const params = new URLSearchParams();
       params.set("from", location.pathname);
       navigate("/login");
     }
-  }, [user]);
+  }, [location.pathname, navigate, user]);
 
   if (!user) {
     return null;

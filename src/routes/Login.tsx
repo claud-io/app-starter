@@ -1,10 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Form, Input } from "antd";
-import { useAuth } from "../provider/AuthProvider";
 import { Localize } from "../utils/Localize";
+import { useAuth } from "../hooks";
 import { UserAuth } from "../types";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const onFinishFailed = (errorInfo: any) => {
   console.log("Failed:", errorInfo);
 };

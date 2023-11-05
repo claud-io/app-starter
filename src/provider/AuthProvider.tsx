@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { login, refreshToken } from "../api/indext";
-import { SignInTokenResponse,User, UserAuth } from "../types";
+import { TokenResponse, User, UserAuth } from "../types";
 import { REFRESH_TOKEN_KEY, TOKEN_KEY } from "../const";
 
 interface IAuthProviderProps {
@@ -15,35 +15,39 @@ interface IAuthContext {
   logout?: () => void;
 }
 
-const AuthContext = React.createContext<IAuthContext>({
+export const AuthContext = React.createContext<IAuthContext>({
   initialized: false,
 });
 
-const AuthProvider = ({ children }: IAuthProviderProps) => {
+export const AuthProvider = ({ children }: IAuthProviderProps) => {
   const [initialized, setIsInitialized] = React.useState(false);
   const [user, setUser] = React.useState<User | undefined>();
 
   const refresh = React.useCallback(() => {
-    const token = localStorage.getItem(TOKEN_KEY);
+    const token = localStorage.getItem(REFRESH_TOKEN_KEY);
     if (token) {
       axios.defaults.headers.common["Authorization"] = "Bearer " + token;
-      return refreshToken(localStorage.getItem(REFRESH_TOKEN_KEY)).then(loadUser);
+      return refreshToken(token).then(loadUser);
     }
 
     delete axios.defaults.headers.common["Authorization"];
-    user && setUser(undefined);
+    setUser(undefined);
     return new Promise((resolve) => resolve(true));
   }, []);
 
-  const loadUser = async (response: SignInTokenResponse) => {
-    if (!response.access_token || !response.refresh_token) {
+  const loadUser = async (response: TokenResponse) => {
+    if (!response) {
+      return false;
+    }
+    const { accessToken, refreshToken } = response;
+    if (!accessToken || !refreshToken) {
       return false;
     }
 
-    localStorage.setItem(REFRESH_TOKEN_KEY, response.refresh_token);
-    localStorage.setItem(TOKEN_KEY, response.access_token);
-    axios.defaults.headers.common["Authorization"] = "Bearer " + response.access_token;
-    setUser({...response})
+    localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+    localStorage.setItem(TOKEN_KEY, accessToken);
+    axios.defaults.headers.common["Authorization"] = "Bearer " + accessToken;
+    setUser({ ...response });
     return true;
   };
 
@@ -59,7 +63,7 @@ const AuthProvider = ({ children }: IAuthProviderProps) => {
     refresh().then(() => {
       setIsInitialized(true);
     });
-  }, []);
+  }, [refresh]);
 
   return (
     <AuthContext.Provider
@@ -69,7 +73,3 @@ const AuthProvider = ({ children }: IAuthProviderProps) => {
     </AuthContext.Provider>
   );
 };
-
-export const useAuth = () => React.useContext(AuthContext);
-
-export default AuthProvider;
